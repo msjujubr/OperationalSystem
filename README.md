@@ -18,12 +18,12 @@ text
 .
 ├── main.cpp                # Ponto de entrada (equipe Integração)
 ├──── memory/...            # Pasta componente MEMÓRIA
-├──── cpu/...            # Pasta componente MEMÓRIA
-├──── clock/...            # Pasta componente MEMÓRIA
-└──── src/so.cpp            # Implementação do Loader e Executor de Jobs
+├──── cpu/...               # Pasta componente CPU 
+└──── loader/...            # Pasta componente CLOCK-LOADER 
+
 ```
 
-# DESCONSIDERAR RESTANTE DO README
+# DESCONSIDERAR RESTANTE DO README E SCRIPTS EXISTENTES NA BRANCH MAIN
 
 ## Arquitetura do Sistema
 
