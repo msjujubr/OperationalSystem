@@ -2,6 +2,8 @@
 [![Linguagem](https://img.shields.io/badge/Linguagem-C%2B%2B-blue)]()
 
 **NOTA (Júlia): cada equipe faz seu componente e modificações, na própria branch, quem modificará a main (unificar as branch's) será a INTEGRAÇÃO.
+
+
 **NOTA (Júlia): caso precise deixar alguma observação para outra equipe, favor deixar aqui NOTA(seu nome) e ou pedir para seu representante enviar no grupo dos capitães.
 
 Este projeto implementa um simulador computacional desenvolvido para a disciplina de Sistemas Operacionais. O objetivo é construir a base de um ecossistema computacional completo, operando inicialmente sob o paradigma de **processamento em lote (batch)**, similar aos primeiros sistemas computacionais da história.
