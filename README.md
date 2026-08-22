@@ -1,10 +1,29 @@
 # Simulador RISC 16-bits com Processamento Batch
 [![Linguagem](https://img.shields.io/badge/Linguagem-C%2B%2B-blue)]()
 
+**NOTAS (Júlia): 
+
 Este projeto implementa um simulador computacional desenvolvido para a disciplina de Sistemas Operacionais. O objetivo é construir a base de um ecossistema computacional completo, operando inicialmente sob o paradigma de **processamento em lote (batch)**, similar aos primeiros sistemas computacionais da história.
 
 A máquina simulada possui uma arquitetura **RISC (Reduced Instruction Set Computer)** com palavras de **16 bits** e segue o paradigma **Load/Store**, onde operações lógicas e aritméticas ocorrem exclusivamente entre registradores, separando o acesso à memória do processamento dos dados.
 
+
+
+## Estrutura de Arquivos (Favor segui-la)
+
+A separação modular do código foi realizada para atender aos requisitos de encapsulamento do projeto:
+text
+
+```
+.
+├── main.cpp                # Ponto de entrada (equipe Integração)
+├──── memory/...            # Pasta componente MEMÓRIA
+├──── cpu/...            # Pasta componente MEMÓRIA
+├──── clock/...            # Pasta componente MEMÓRIA
+└──── src/so.cpp            # Implementação do Loader e Executor de Jobs
+```
+
+# DESCONSIDERAR RESTANTE DO README
 
 ## Arquitetura do Sistema
 
@@ -126,21 +145,4 @@ CLOCK TOTAL DESTE JOB: 10 ciclos
 
 Iniciando Job 2 (Simulando ataque ao Kernel)...
 [INTERRUPCAO GERADA PELO HARDWARE]: SEGFAULT: Tentativa de leitura em area restrita do SO!
-```
-
-## Estrutura de Arquivos
-
-A separação modular do código foi realizada para atender aos requisitos de encapsulamento do projeto:
-text
-
-```
-.
-├── main.cpp                # Ponto de entrada, definição dos Jobs de teste
-├──── src/defines.hpp       # Constantes e enumeração dos Opcodes
-├──── src/memory.hpp        # Interface da Memória e Disco
-├──── src/memory.cpp        # Implementação da RAM e funções de I/O
-├──── src/cpu.hpp           # Interface da Unidade Central de Processamento
-├──── src/cpu.cpp           # Implementação da CPU (ULA, UC, Registradores)
-├──── src/so.hpp            # Interface do Sistema Operacional (Batch)
-└──── src/so.cpp            # Implementação do Loader e Executor de Jobs
 ```
