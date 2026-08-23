@@ -1,14 +1,17 @@
 #ifndef CPU_HPP
 #define CPU_HPP
-#include "memory.hpp"
+
+#include "registers/register_bank.hpp"
+#include "../memory.hpp"
+#include "../defines.hpp"
 #include <cstdint>
+#include <iostream>
+#include <ostream>
 
 // UNIDADE CENTRAL DE PROCESSAMENTO (CPU)
 class CPU {
 private:
-    uint16_t R[8];          // 8 Registradores de uso geral
-    uint16_t PC;            // Program Counter
-    uint16_t IR;            // Instruction Register
+    RegisterBank regBank;   // Banco de Registradores modularizado
     bool haltStatus;
 
     /**
@@ -38,8 +41,12 @@ public:
      */
     void step();
 
-    /** Exibe o estado atual da CPU (PC, IR e registradores) */
-    void imprimirEstado() const;
+    /** Exibe o estado atual da CPU (PC, IR e registradores) em qualquer stream */
+    void imprimirEstado(std::ostream& out = std::cout) const;
+
+    /** Acesso ao Banco de Registradores */
+    RegisterBank& getRegisterBank();
+    const RegisterBank& getRegisterBank() const;
 };
 
 #endif // CPU_HPP

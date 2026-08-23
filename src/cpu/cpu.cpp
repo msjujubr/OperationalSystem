@@ -9,31 +9,43 @@ CPU::CPU() {
 }
 
 void CPU::reset() {
-    for (int i = 0; i < 8; i++) R[i] = 0;
-    PC = OS_RESERVED_MEM;   // Inicia após a área do SO
-    IR = 0;
+    regBank.reset();
+    regBank.setPC(OS_RESERVED_MEM);   // Inicia após a área do SO
     haltStatus = false;
 }
 
 void CPU::setPC(uint16_t startAddress) {
-    PC = startAddress;
+    regBank.setPC(startAddress);
 }
 
 bool CPU::isHalted() const {
     return haltStatus;
 }
 
+RegisterBank& CPU::getRegisterBank() {
+    return regBank;
+}
+
+const RegisterBank& CPU::getRegisterBank() const {
+    return regBank;
+}
+
 // ----- ULA (Unidade Lógica e Aritmética) --------------------------------------
 void CPU::ULA(uint16_t opcode, uint16_t regDest, uint16_t regF1, uint16_t regF2) {
+    uint16_t val1 = regBank.read(regF1);
+    uint16_t val2 = regBank.read(regF2);
+    uint16_t res = 0;
+
     switch (opcode) {
-        case OP_ADD: R[regDest] = R[regF1] + R[regF2]; break;
-        case OP_SUB: R[regDest] = R[regF1] - R[regF2]; break;
-        case OP_AND: R[regDest] = R[regF1] & R[regF2]; break;
-        case OP_OR:  R[regDest] = R[regF1] | R[regF2]; break;
+        case OP_ADD: res = val1 + val2; break;
+        case OP_SUB: res = val1 - val2; break;
+        case OP_AND: res = val1 & val2; break;
+        case OP_OR:  res = val1 | val2; break;
         default:
-            // Não deve ocorrer, pois o chamador já validou o opcode
             throw std::runtime_error("ULA: Opcode invalido!");
     }
+
+    regBank.write(regDest, res);
 }
 
 // ----- Unidade de Controle (Busca → Decodificação → Execução) ----------------
@@ -41,8 +53,10 @@ void CPU::step() {
     if (haltStatus) return;
 
     // 1. BUSCA
-    IR = LerMemoria(PC);
-    PC++;   // Avança PC
+    uint16_t pc = regBank.getPC();
+    uint16_t IR = LerMemoria(pc);
+    regBank.setIR(IR);
+    regBank.incrementPC();   // Avança PC
 
     // 2. DECODIFICAÇÃO (Mascaramento de bits)
     uint16_t opcode    = (IR >> 12) & 0x000F;
@@ -54,11 +68,11 @@ void CPU::step() {
     // 3. EXECUÇÃO
     switch (opcode) {
         case OP_LOAD:
-            R[regDest] = LerMemoria(endereco + OS_RESERVED_MEM);
+            regBank.write(regDest, LerMemoria(endereco + OS_RESERVED_MEM));
             break;
 
         case OP_STORE:
-            EscreverMemoria(endereco + OS_RESERVED_MEM, R[regDest]);
+            EscreverMemoria(endereco + OS_RESERVED_MEM, regBank.read(regDest));
             break;
 
         case OP_ADD:
@@ -69,13 +83,13 @@ void CPU::step() {
             break;
 
         case OP_BEQ:
-            if (R[regDest] == R[regF1]) {
-                PC = (endereco + OS_RESERVED_MEM);
+            if (regBank.read(regDest) == regBank.read(regF1)) {
+                regBank.setPC(endereco + OS_RESERVED_MEM);
             }
             break;
 
         case OP_JUMP:
-            PC = ((IR & 0x0FFF) + OS_RESERVED_MEM);
+            regBank.setPC((IR & 0x0FFF) + OS_RESERVED_MEM);
             break;
 
         case OP_HALT:
@@ -90,15 +104,6 @@ void CPU::step() {
 }
 
 // ----- Impressão do estado da CPU --------------------------------------------
-void CPU::imprimirEstado() const {
-    std::cout << "--- ESTADO DA CPU ---" << std::endl;
-    std::cout << "PC: 0x" << std::setfill('0') << std::setw(4) << std::hex << PC
-              << "   IR: 0x" << std::setw(4) << IR << std::dec << std::endl;
-    std::cout << "Registradores Gerais:" << std::endl;
-    for (int i = 0; i < 8; i += 4) {
-        std::cout << "R" << i << ": 0x" << std::setfill('0') << std::setw(4) << std::hex << R[i] << "  "
-                  << "R" << i+1 << ": 0x" << std::setw(4) << R[i+1] << "  "
-                  << "R" << i+2 << ": 0x" << std::setw(4) << R[i+2] << "  "
-                  << "R" << i+3 << ": 0x" << std::setw(4) << R[i+3] << std::dec << std::endl;
-    }
+void CPU::imprimirEstado(std::ostream& out) const {
+    regBank.imprimirEstado(out);
 }
