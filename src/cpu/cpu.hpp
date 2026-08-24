@@ -2,31 +2,43 @@
 #define CPU_HPP
 
 #include "registers/register_bank.hpp"
+#include "ula/ula.hpp"
 #include "../memory.hpp"
 #include "../defines.hpp"
 #include <cstdint>
 #include <iostream>
 #include <ostream>
 
-// UNIDADE CENTRAL DE PROCESSAMENTO (CPU)
+/**
+ * ============================================================================
+ * @brief Unidade Central de Processamento (CPU)
+ * ============================================================================
+ * Atua como o núcleo integrador da arquitetura computacional simulada.
+ * 
+ * Responsabilidades:
+ * 1. Integração Modular: Coordena o Banco de Registradores (RegisterBank) e a ULA.
+ * 2. Ciclo de Instrução (Busca -> Decodificação -> Execução).
+ * 3. Barramento de Memória: Realiza transferências Load/Store via interface de memória.
+ */
 class CPU {
 private:
-    RegisterBank regBank;   // Banco de Registradores modularizado
-    bool haltStatus;
+    RegisterBank regBank;   ///< Banco de Registradores modularizado (R0..R7, PC, IR)
+    ULA ula;                ///< Unidade Lógica e Aritmética modularizada
+    bool haltStatus;        ///< Flag que indica se a CPU está parada (HALT)
 
     /**
-     * ULA - Unidade Lógica e Aritmética (sem acesso à memória)
-     * @param opcode  Código da operação (ADD, SUB, AND, OR)
-     * @param regDest Registrador de destino
-     * @param regF1   Primeiro operando (registrador fonte)
-     * @param regF2   Segundo operando (registrador fonte)
+     * @brief Despacha uma operação computacional para a ULA e salva o resultado no registrador.
+     * @param opcode  Código da operação (OP_ADD, OP_SUB, OP_AND, OP_OR, etc.).
+     * @param regDest Índice do registrador de destino (0..7).
+     * @param regF1   Índice do primeiro registrador fonte (0..7).
+     * @param regF2   Índice do segundo registrador fonte (0..7).
      */
-    void ULA(uint16_t opcode, uint16_t regDest, uint16_t regF1, uint16_t regF2);
+    void dispararULA(uint16_t opcode, uint16_t regDest, uint16_t regF1, uint16_t regF2);
 
 public:
     CPU();
 
-    /** Reinicia a CPU (zera registradores e aponta PC para a área do SO) */
+    /** Reinicia a CPU (zera registradores e aponta PC para a área inicial do job) */
     void reset();
 
     /** Define o valor do Program Counter */
@@ -36,8 +48,8 @@ public:
     bool isHalted() const;
 
     /**
-     * step - Ciclo de Busca, Decodificação e Execução (Unidade de Controle)
-     * @throws std::runtime_error se opcode for inválido
+     * @brief step - Executa um ciclo completo de instrução (Busca, Decodificação, Execução).
+     * @throws std::runtime_error se um opcode desconhecido for encontrado.
      */
     void step();
 
@@ -47,6 +59,11 @@ public:
     /** Acesso ao Banco de Registradores */
     RegisterBank& getRegisterBank();
     const RegisterBank& getRegisterBank() const;
+
+    /** Acesso à ULA */
+    ULA& getULA();
+    const ULA& getULA() const;
 };
 
 #endif // CPU_HPP
+
