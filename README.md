@@ -28,6 +28,11 @@ text
 
 ```
 
+## Colaboradores
+
+[![Contributors](https://contrib.rocks/image?repo=msjujubr/OperationalSystem)](https://github.com/msjujubr/OperationalSystem/graphs/contributors)
+
+
 # DESCONSIDERAR RESTANTE DO README E SCRIPTS EXISTENTES NA BRANCH MAIN
 
 ## Arquitetura do Sistema
