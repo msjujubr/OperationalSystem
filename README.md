@@ -3,6 +3,8 @@
 
 **NOTA (Júlia): cada equipe faz seu componente e modificações, na própria branch, quem modificará a main (unificar as branch's) será a INTEGRAÇÃO.
 
+**NOTA (Júlia): estarei modificando o README e os pdf's na branch main. No grupo dos capitães, há o link do Overleaf dos documentos: Manual de Assembly e Relatório
+
 
 **NOTA (Júlia): caso precise deixar alguma observação para outra equipe, favor deixar aqui NOTA(seu nome) e ou pedir para seu representante enviar no grupo dos capitães.
 
