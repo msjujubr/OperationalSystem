@@ -1,0 +1,88 @@
+# ==============================================================================
+# .gitignore - Simulador RISC 16-Bits (Sistemas Operacionais)
+# ==============================================================================
+
+# --- Binários e Executáveis Compilados ---
+simulador
+simulador.exe
+*.out
+*.app
+*.exe
+*.hex
+a.out
+
+# --- Arquivos Objeto e Bibliotecas Estáticas/Dinâmicas ---
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.a
+*.la
+*.lai
+
+# --- Diretórios de Build e Ferramentas de Compilação ---
+bin/
+build/
+dist/
+out/
+target/
+cmake-build-*/
+.cache/
+
+# --- Arquivos de Saída e Logs de Execução ---
+# (output.dat e arquivos de log são gerados dinamicamente na execução)
+output.dat
+*.log
+log/*.log
+*.tmp
+*.temp
+
+# --- Configurações de IDEs e Editores de Texto ---
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# CLion / JetBrains
+.idea/
+*.iml
+
+# Visual Studio
+.vs/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+# Eclipse / Code::Blocks
+.project
+.cproject
+.settings/
+*.cbp
+*.layout
+
+# Editores de terminal (Vim, Emacs, Nano, Sublime)
+*~
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# --- Arquivos Temporários de Sistemas Operacionais ---
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
