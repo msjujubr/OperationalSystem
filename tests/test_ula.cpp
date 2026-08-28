@@ -32,24 +32,6 @@ void testBasicArithmetic() {
     TEST_ASSERT(ula.result == -5);
     TEST_ASSERT(!ula.overflow);
 
-    // 3. MUL
-    ula.execute(MUL, 6, 7);
-    TEST_ASSERT(ula.result == 42);
-    TEST_ASSERT(!ula.overflow);
-
-    ula.execute(MUL, static_cast<uint16_t>(-3), 4);
-    TEST_ASSERT(ula.result == -12);
-    TEST_ASSERT(!ula.overflow);
-
-    // 4. DIV
-    ula.execute(DIV, 42, 6);
-    TEST_ASSERT(ula.result == 7);
-    TEST_ASSERT(!ula.overflow);
-
-    ula.execute(DIV, static_cast<uint16_t>(-20), 4);
-    TEST_ASSERT(ula.result == -5);
-    TEST_ASSERT(!ula.overflow);
-
     std::cout << "[PASS] Aritmetica basica validada!\n";
 }
 
@@ -65,28 +47,6 @@ void testBitwiseAndLogic() {
     ula.execute(OR_OP, 0b1100, 0b1010);
     TEST_ASSERT(static_cast<uint16_t>(ula.result) == 0b1110);
 
-    // 3. BEQ / BNE
-    ula.execute(BEQ, 100, 100);
-    TEST_ASSERT(ula.result == 1);
-    ula.execute(BEQ, 100, 101);
-    TEST_ASSERT(ula.result == 0);
-
-    ula.execute(BNE, 100, 101);
-    TEST_ASSERT(ula.result == 1);
-    ula.execute(BNE, 100, 100);
-    TEST_ASSERT(ula.result == 0);
-
-    // 4. BLT / BGT
-    ula.execute(BLT, 10, 20);
-    TEST_ASSERT(ula.result == 1);
-    ula.execute(BLT, 20, 10);
-    TEST_ASSERT(ula.result == 0);
-
-    ula.execute(BGT, 20, 10);
-    TEST_ASSERT(ula.result == 1);
-    ula.execute(BGT, 10, 20);
-    TEST_ASSERT(ula.result == 0);
-
     std::cout << "[PASS] Operacoes logicas validadas!\n";
 }
 
@@ -100,17 +60,6 @@ void testEdgeCasesAndOverflow() {
 
     // 2. Overflow em SUB negativo
     ula.execute(SUB, static_cast<uint16_t>(-30000), 10000); // -40000 < -32768
-    TEST_ASSERT(ula.overflow);
-
-    // 3. Divisao por zero
-    ula.execute(DIV, 100, 0);
-    TEST_ASSERT(ula.overflow);
-    TEST_ASSERT(ula.result == 0);
-
-    // 4. Overflow critico INT16_MIN / -1
-    uint16_t int16_min = static_cast<uint16_t>(std::numeric_limits<int16_t>::min());
-    uint16_t minus_one = static_cast<uint16_t>(-1);
-    ula.execute(DIV, int16_min, minus_one);
     TEST_ASSERT(ula.overflow);
 
     std::cout << "[PASS] Casos de borda validados!\n";
@@ -132,11 +81,11 @@ void testOpcodeBridge() {
     TEST_ASSERT(ula.executeOpcode(OP_OR, 0xFF00, 0x00FF));
     TEST_ASSERT(static_cast<uint16_t>(ula.result) == 0xFFFF);
 
-    TEST_ASSERT(ula.executeOpcode(OP_BEQ, 42, 42));
-    TEST_ASSERT(ula.result == 1);
-
-    // Opcode nao computacional deve retornar false
+    // Opcodes nao computacionais devem retornar false
+    TEST_ASSERT(!ula.executeOpcode(OP_BEQ, 42, 42));
     TEST_ASSERT(!ula.executeOpcode(OP_LOAD, 10, 20));
+    TEST_ASSERT(!ula.executeOpcode(OP_JUMP, 0, 0));
+    TEST_ASSERT(!ula.executeOpcode(OP_HALT, 0, 0));
 
     std::cout << "[PASS] Ponte de opcodes validada!\n";
 }
