@@ -40,6 +40,11 @@ public:
 
     /** Exibe o estado atual da CPU (PC, IR e registradores) */
     void imprimirEstado() const;
+
+    /** Métodos de consulta do estado (utilizados pela telemetria do Loader) */
+    uint16_t getPC() const { return PC; }
+    uint16_t getIR() const { return IR; }
+    const uint16_t* getRegistradores() const { return R; }
 };
 
 #endif // CPU_HPP

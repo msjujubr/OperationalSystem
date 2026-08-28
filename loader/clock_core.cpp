@@ -25,6 +25,11 @@ void ClockCore::tickBusca() {
     ciclosTotalGlobal += 1;
 }
 
+void ClockCore::adicionarCiclos(uint32_t ciclos) {
+    ciclosJob += ciclos;
+    ciclosTotalGlobal += ciclos;
+}
+
 uint32_t ClockCore::getCycles() {
     return ciclosJob;
 }

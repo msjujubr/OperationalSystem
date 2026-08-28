@@ -11,7 +11,7 @@
 class RAMLoader {
 public:
     // Carrega o JobData na RAM física a partir do endereço base (OS_RESERVED_MEM = 512)
-    static bool carregarNaRAM(const JobData& job, uint16_t* ram, uint16_t tamRam);
+    static bool carregarNaRAM(const JobData& job, uint16_t* ram, uint32_t tamRam = 65536);
 };
 
 #endif // RAM_LOADER_HPP

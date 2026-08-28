@@ -3,10 +3,17 @@
 // Endereço base da RAM física após a área reservada ao Sistema Operacional.
 // (Mesmo valor citado no comentário do ram_loader.hpp: OS_RESERVED_MEM = 512)
 static const uint16_t OS_RESERVED_MEM = 512;
+static const uint32_t DEFAULT_RAM_SIZE = 65536;
 
-bool RAMLoader::carregarNaRAM(const JobData& job, uint16_t* ram, uint16_t tamRam) {
+bool RAMLoader::carregarNaRAM(const JobData& job, uint16_t* ram, uint32_t tamRam) {
     if (ram == nullptr) {
         return false;
+    }
+
+    // Proteção defensiva: caso tamRam venha zerado por overflow de 16-bits (ex: TAM_RAM = 65536),
+    // assume o padrão de 64K palavras da especificação
+    if (tamRam == 0) {
+        tamRam = DEFAULT_RAM_SIZE;
     }
 
     // 1) Copiar as instruções para a RAM, a partir do endereço base (512)

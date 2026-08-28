@@ -1,4 +1,6 @@
 #include "parser.hpp"
+#include "clock_core.hpp"
+#include "metrics.hpp"
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -64,9 +66,10 @@ bool JobParser::carregarArquivo(const std::string& caminho, JobData& outJob) {
                     uint16_t val  = static_cast<uint16_t>(std::stoul(part2, nullptr, 16));
                     outJob.variaveis.push_back({addr, val});
                 } else {
-                    // Possui so o valor (assumimos endereco sequencial comecando do 0)
+                    // Possui so o valor: aloca no espaco seguro apos as instrucoes
+                    // para evitar colisao com a memoria de codigo em 512
                     uint16_t val  = static_cast<uint16_t>(std::stoul(part1, nullptr, 16));
-                    uint16_t addr = static_cast<uint16_t>(outJob.variaveis.size());
+                    uint16_t addr = static_cast<uint16_t>(outJob.instrucoes.size() + outJob.variaveis.size());
                     outJob.variaveis.push_back({addr, val});
                 }
             } catch (const std::exception& e) {
@@ -92,6 +95,10 @@ int JobParser::lerDisco(uint16_t dadoBuscado, const std::vector<uint16_t>& disco
         }
     }
     
+    // Registra a latência e o acesso no motor de relógio e na telemetria
+    ClockCore::tickDisco(setoresPercorridos);
+    MetricsTracker::registrarAcessoDisco();
+
     // Retorna o total de ciclos gastos na operacao
     return setoresPercorridos * 50;
 }

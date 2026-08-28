@@ -67,14 +67,23 @@ void BatchManager::executarLote(const std::vector<std::string>& listaArquivosJob
 
         std::cout << "Carregando Job " << job.id << ": " << job.nomeArquivo << "..." << std::endl;
 
-        // --- 2. Reset de contexto -----------------------------------------
+        // --- 2. Reset de contexto e Telemetria de Disco -------------------
         // Zera o clock do job, abre a telemetria e devolve a CPU ao estado
         // inicial. O PC é posicionado explicitamente na primeira instrução do
         // job (endereço base 512, logo após a área reservada do SO).
         ClockCore::reset();
         MetricsTracker::iniciarJob(job.id, job.nomeArquivo);
+        clockGlobal = 0;
+        acessosMemoria = 0;
+        acessosDisco = 0;
+        instExecutadas = 0;
         cpu.reset();
         cpu.setPC(OS_RESERVED_MEM);
+
+        // O carregamento do Job a partir do Disco Virtual para a RAM gera 1 acesso
+        // a disco (I/O) com penalidade inicial de 50 ciclos de relógio
+        ClockCore::tickDisco(1);
+        MetricsTracker::registrarAcessoDisco();
 
         // --- 3. Carga das instruções e variáveis na RAM (RAMLoader) --------
         const bool cargaConcluida = RAMLoader::carregarNaRAM(job, RAM, TAM_RAM);
@@ -105,7 +114,8 @@ void BatchManager::executarLote(const std::vector<std::string>& listaArquivosJob
                 }
 
                 if (cpu.isHalted()) {
-                    std::cout << "Execucao finalizada (HALT encontrado)." << std::endl;
+                    std::cout << "Execucao finalizada (HALT encontrado no PC 0x" 
+                              << std::hex << std::uppercase << cpu.getPC() << std::dec << ")." << std::endl;
                 }
             } catch (const std::exception& e) {
                 // Interrupção de hardware (SEGFAULT na área do SO ou opcode inválido).
@@ -113,13 +123,22 @@ void BatchManager::executarLote(const std::vector<std::string>& listaArquivosJob
                 std::cout << "[INTERRUPCAO GERADA PELO HARDWARE]: " << e.what() << std::endl;
                 MetricsTracker::marcarErroKernel();
             }
+
+            // Sincronização defensiva: caso o módulo de memória de outro grupo
+            // tenha incrementado as variáveis globais de memory.hpp diretamente,
+            // garantimos que o ClockCore e a telemetria reflitam esses acessos:
+            if (acessosMemoria > 0 && MetricsTracker::obterMetricas().acessosRAM == 0) {
+                MetricsTracker::registrarAcessoRAM(static_cast<uint32_t>(acessosMemoria));
+                for (int a = 0; a < acessosMemoria; ++a) {
+                    ClockCore::tickRAM();
+                }
+            }
         }
 
         // --- 5. Relatório do job ------------------------------------------
-        // Pendente de integração: MetricsTracker::capturarEstadoCPU(PC, IR, R)
-        // não pode ser chamado aqui porque a CPU atual mantém PC, IR e R0..R7
-        // privados e não expõe nenhum acessor. Será ligado quando o módulo de
-        // CPU disponibilizar o RegisterBank (getContext / getRegistersSnapshot).
+        // Captura o snapshot real da CPU (PC, IR e Registradores R0..R7)
+        MetricsTracker::capturarEstadoCPU(cpu.getPC(), cpu.getIR(), cpu.getRegistradores());
+
         const JobMetrics metricas = MetricsTracker::obterMetricas();
         Reporter::exibirTerminal(metricas);
         Reporter::salvarOutputDat(ARQUIVO_SAIDA, metricas);
