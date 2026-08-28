@@ -1,7 +1,7 @@
 *.exe
 *.o
 *.out
-simulador
+/simulador
 .vscode/
 .idea/
 build/
