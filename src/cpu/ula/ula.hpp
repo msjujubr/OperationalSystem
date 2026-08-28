@@ -8,34 +8,13 @@
  * ============================================================================
  * @brief Enumeração de Operações da ULA
  * ============================================================================
- * Define os identificadores das operações aritméticas, lógicas, de comparação
- * e cálculo de endereços suportadas pela ULA de 16 bits.
+ * Define os identificadores das operações aritméticas da ULA.
  */
 enum operation {
-    // Operações Aritméticas e Lógicas Básicas
     ADD,    ///< Soma (A + B)
     SUB,    ///< Subtração (A - B)
-    MUL,    ///< Multiplicação (A * B)
-    DIV,    ///< Divisão inteira com sinal (A / B)
     AND_OP, ///< Conjunção lógica bit a bit (A & B)
     OR_OP,  ///< Disjunção lógica bit a bit (A | B)
-
-    // Operações de Comparação / Fluxo
-    BEQ,    ///< Branch if Equal (retorna 1 se A == B, senão 0)
-    BNE,    ///< Branch if Not Equal (retorna 1 se A != B, senão 0)
-    BLT,    ///< Branch if Less Than (retorna 1 se A < B, senão 0)
-    BGT,    ///< Branch if Greater Than (retorna 1 se A > B, senão 0)
-    JUMP,   ///< Salto incondicional (retorna 1)
-
-    // Comparações com Imediato
-    BGTI,   ///< Branch if Greater Than Immediate (A > B)
-    BLTI,   ///< Branch if Less Than Immediate (A < B)
-
-    // Instruções de Cálculo de Endereço de Memória
-    LW,     ///< Load Word (calcula endereço base + offset)
-    LA,     ///< Load Address (calcula endereço efetivo base + offset)
-    ST,     ///< Store Word (calcula endereço base + offset)
-    HALT    ///< Parada
 };
 
 /**
@@ -81,7 +60,7 @@ public:
     /**
      * @brief Executa a operação correspondente ao opcode oficial do defines.hpp.
      * Facilita a integração direta com a Unidade de Controle / CPU.
-     * @param opcode Código de operação (OP_ADD, OP_SUB, OP_AND, OP_OR, etc.).
+     * @param opcode Código de operação (OP_ADD, OP_SUB, OP_AND, OP_OR).
      * @param a Primeiro operando de 16 bits.
      * @param b Segundo operando de 16 bits.
      * @return true se o opcode for suportado pela ULA, false caso contrário.

@@ -102,8 +102,8 @@ void CPU::step() {
         // --- Operações de Controle de Fluxo ---
         case OP_BEQ:
             // Compara os dois registradores via ULA
-            ula.execute(BEQ, regBank.read(regDest), regBank.read(regF1));
-            if (ula.result == 1) {
+            ula.execute(SUB, regBank.read(regDest), regBank.read(regF1));
+            if (ula.result == 0) {
                 regBank.setPC(endereco + OS_RESERVED_MEM);
             }
             break;
