@@ -4,6 +4,21 @@
 
 ---
 
+## 👥 Equipe Responsável (Subgrupo Clock & Loader)
+
+| Integrante | Função / Responsabilidade |
+| :--- | :--- |
+| **João Vitor** | Líder do Subgrupo & Interfaces Gerais |
+| **Ahmed** | Motor do Clock (`clock_core`) |
+| **Hugo** | Telemetria & Métricas (`metrics`) |
+| **Thallys** | Relatório & Persistência (`reporter` e `output.dat`) |
+| **Lucas Roseno** | Parser de Arquivos & Acesso a Disco (`parser`) |
+| **Luiz Fernando** | Carga e Mapeamento na RAM (`ram_loader`) |
+| **João Pedro** | Orquestrador e Gerenciador de Lote (`batch_manager`) |
+| **Bernardo** | Cargas de Teste & Documentação Técnica (`tests/` e `docs/`) |
+
+---
+
 ## 1. Arquitetura do Módulo Clock & Loader
 
 O módulo é composto por 7 componentes internos que se comunicam de forma hierárquica:
