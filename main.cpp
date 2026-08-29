@@ -14,7 +14,8 @@ int main(int argc, char* argv[]) {
         // Cargas padrão de teste para validação do Simulador RISC
         listaJobs = {
             "tests/job1_soma.txt",
-            "tests/job2_vetor.txt"
+            "tests/job2_vetor.txt",
+            "tests/job3_loop.txt"
         };
     }
 
