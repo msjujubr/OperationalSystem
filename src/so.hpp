@@ -1,7 +1,7 @@
 #ifndef SO_HPP
 #define SO_HPP
 
-#include "cpu.hpp"
+#include "cpu/cpu.hpp"
 #include <vector>
 #include <string>
 #include <cstdint>
