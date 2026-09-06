@@ -3,6 +3,7 @@
 
 #include "registers/register_bank.hpp"
 #include "ula/ula.hpp"
+#include "control/control_unit.hpp"
 #include "../memory.hpp"
 #include "../defines.hpp"
 #include <cstdint>
@@ -16,40 +17,37 @@
  * Atua como o núcleo integrador da arquitetura computacional simulada.
  * 
  * Responsabilidades:
- * 1. Integração Modular: Coordena o Banco de Registradores (RegisterBank) e a ULA.
- * 2. Ciclo de Instrução (Busca -> Decodificação -> Execução).
- * 3. Barramento de Memória: Realiza transferências Load/Store via interface de memória.
+ * 1. Integração Modular: possui o Banco de Registradores (RegisterBank),
+ *    a ULA e a Unidade de Controle (ControlUnit), e os conecta entre si.
+ * 2. Delegação do Ciclo de Instrução: a CPU não busca, decodifica nem executa
+ *    instruções por conta própria — isso é responsabilidade exclusiva da UC.
+ *    A CPU apenas aciona controlUnit.step(regBank, ula) a cada pulso de clock.
+ * 3. Barramento de Memória: a leitura/escrita em RAM (LOAD/STORE) é feita
+ *    pela UC através da interface mediadora LerMemoria/EscreverMemoria.
  */
 class CPU {
 private:
-    RegisterBank regBank;   ///< Banco de Registradores modularizado (R0..R7, PC, IR)
-    ULA ula;                ///< Unidade Lógica e Aritmética modularizada
-    bool haltStatus;        ///< Flag que indica se a CPU está parada (HALT)
-
-    /**
-     * @brief Despacha uma operação computacional para a ULA e salva o resultado no registrador.
-     * @param opcode  Código da operação (OP_ADD, OP_SUB, OP_AND, OP_OR, etc.).
-     * @param regDest Índice do registrador de destino (0..7).
-     * @param regF1   Índice do primeiro registrador fonte (0..7).
-     * @param regF2   Índice do segundo registrador fonte (0..7).
-     */
-    void dispararULA(uint16_t opcode, uint16_t regDest, uint16_t regF1, uint16_t regF2);
+    RegisterBank regBank;     ///< Banco de Registradores modularizado (R0..R7, PC, IR)
+    ULA ula;                  ///< Unidade Lógica e Aritmética modularizada
+    ControlUnit controlUnit;  ///< Unidade de Controle: orquestra Fetch -> Decode -> Execute
 
 public:
     CPU();
 
-    /** Reinicia a CPU (zera registradores e aponta PC para a área inicial do job) */
+    /** Reinicia a CPU (zera registradores, aponta PC para a área inicial do job e limpa o HALT da UC) */
     void reset();
 
     /** Define o valor do Program Counter */
     void setPC(uint16_t startAddress);
 
-    /** Retorna true se a CPU está em estado HALT */
+    /** Retorna true se a UC já processou um HALT (job atual finalizado) */
     bool isHalted() const;
 
     /**
-     * @brief step - Executa um ciclo completo de instrução (Busca, Decodificação, Execução).
-     * @throws std::runtime_error se um opcode desconhecido for encontrado.
+     * @brief step - Executa um ciclo completo de instrução.
+     * A CPU delega inteiramente o ciclo (Busca, Decodificação, Execução) à
+     * Unidade de Controle, fornecendo a ela o RegisterBank e a ULA.
+     * @throws std::runtime_error se a UC encontrar um opcode desconhecido.
      */
     void step();
 
@@ -63,7 +61,10 @@ public:
     /** Acesso à ULA */
     ULA& getULA();
     const ULA& getULA() const;
+
+    /** Acesso à Unidade de Controle */
+    ControlUnit& getControlUnit();
+    const ControlUnit& getControlUnit() const;
 };
 
 #endif // CPU_HPP
-

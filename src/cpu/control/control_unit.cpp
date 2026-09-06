@@ -97,9 +97,12 @@ void ControlUnit::execute(const InstrucaoDecodificada &instr,
 
   // --- Controle de Fluxo ---
   case OP_BEQ:
-    // A UC pede à ULA para comparar; a UC decide o desvio.
-    ula.execute(BEQ, regBank.read(instr.regDest), regBank.read(instr.regF1));
-    if (ula.result == 1) {
+    // A UC pede à ULA para comparar (via subtração); a UC decide o desvio.
+    // Obs: BEQ não é uma operação da ULA (enum operation só tem
+    // ADD/SUB/AND_OP/OR_OP) — o desvio é lido a partir do resultado
+    // de uma subtração: se (regDest - regF1) == 0, os valores são iguais.
+    ula.execute(SUB, regBank.read(instr.regDest), regBank.read(instr.regF1));
+    if (ula.result == 0) {
       regBank.setPC(instr.endereco + OS_RESERVED_MEM);
     }
     break;
