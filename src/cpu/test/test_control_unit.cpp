@@ -1,8 +1,8 @@
-#include "../src/cpu/control/control_unit.hpp"
-#include "../src/cpu/registers/register_bank.hpp"
-#include "../src/cpu/ula/ula.hpp"
-#include "../src/defines.hpp"
-#include "../src/memory.hpp"
+#include "../control/control_unit.hpp"
+#include "../registers/register_bank.hpp"
+#include "../ula/ula.hpp"
+#include "../../defines.hpp"
+#include "../../memory.hpp"
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>

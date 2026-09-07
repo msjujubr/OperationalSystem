@@ -2,8 +2,8 @@
 #include <cstdlib>
 #include <cstdint>
 #include <limits>
-#include "../src/cpu/ula/ula.hpp"
-#include "../src/defines.hpp"
+#include "../ula/ula.hpp"
+#include "../../defines.hpp"
 
 #define TEST_ASSERT(condition) \
     do { \

@@ -4,8 +4,8 @@
 #include <vector>
 #include <stdexcept>
 #include <cstdlib>
-#include "../src/cpu/registers/register_bank.hpp"
-#include "../src/cpu/registers/register_table.hpp"
+#include "../registers/register_bank.hpp"
+#include "../registers/register_table.hpp"
 
 // Macro de teste resiliente e independente de NDEBUG
 #define TEST_ASSERT(condition) \

@@ -2,9 +2,9 @@
 #include <vector>
 #include <cstdint>
 #include <cstdlib>
-#include "../src/cpu/cpu.hpp"
-#include "../src/memory.hpp"
-#include "../src/defines.hpp"
+#include "../cpu.hpp"
+#include "../../memory.hpp"
+#include "../../defines.hpp"
 
 #define TEST_ASSERT(condition) \
     do { \

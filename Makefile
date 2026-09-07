@@ -13,7 +13,7 @@ CPU_DIR   := $(SRC_DIR)/cpu
 REG_DIR   := $(CPU_DIR)/registers
 ULA_DIR   := $(CPU_DIR)/ula
 CONTROL_DIR := $(CPU_DIR)/control
-TESTS_DIR := tests
+TESTS_DIR := src/cpu/test
 BUILD_DIR := build
 
 # Executável principal
