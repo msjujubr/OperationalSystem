@@ -16,7 +16,7 @@ enum Opcodes {
     OP_HALT  = 0xF  // Fim do job
 };
 
-const uint16_t TAM_RAM          = 65535;
+const uint32_t TAM_RAM          = 65536;
 const uint16_t OS_RESERVED_MEM  = 512; // Primeiros 512 endereços são do SO
 
 #endif // DEFINES_HPP
