@@ -5,3 +5,5 @@
 .vscode/
 .idea/
 build/
+output.dat
+log/

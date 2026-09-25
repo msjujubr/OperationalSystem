@@ -46,8 +46,10 @@ TEST_ULA_BIN     := $(BUILD_DIR)/test_ula
 TEST_REG_BIN     := $(BUILD_DIR)/test_registers
 TEST_CPU_BIN     := $(BUILD_DIR)/test_cpu
 TEST_CONTROL_BIN := $(BUILD_DIR)/test_control_unit
+TEST_MEM_BIN     := $(BUILD_DIR)/test_memoria
+TEST_CPU_MEM_BIN := $(BUILD_DIR)/test_cpu_memoria
 
-.PHONY: all run test test_ula test_registers test_cpu test_control_unit clean help
+.PHONY: all run test test_ula test_registers test_cpu test_control_unit test_memoria test_cpu_memoria clean help
 
 # Target padrão
 all: $(TARGET)
@@ -98,6 +100,20 @@ $(TEST_CONTROL_BIN): $(BUILD_DIR)/$(TESTS_DIR)/test_control_unit.o \
 	@mkdir -p $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
+$(TEST_MEM_BIN): $(BUILD_DIR)/tests/teste_memoria.o $(BUILD_DIR)/$(SRC_DIR)/memory.o
+	@mkdir -p $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
+$(TEST_CPU_MEM_BIN): $(BUILD_DIR)/tests/teste_cpu_memoria.o \
+                      $(BUILD_DIR)/$(SRC_DIR)/memory.o \
+                      $(BUILD_DIR)/$(CPU_DIR)/cpu.o \
+                      $(BUILD_DIR)/$(CONTROL_DIR)/control_unit.o \
+                      $(BUILD_DIR)/$(REG_DIR)/register_bank.o \
+                      $(BUILD_DIR)/$(REG_DIR)/register_table.o \
+                      $(BUILD_DIR)/$(ULA_DIR)/ula.o
+	@mkdir -p $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
 test_ula: $(TEST_ULA_BIN)
 	@echo ""
 	@echo "--- Executando Testes da ULA ---"
@@ -118,8 +134,18 @@ test_control_unit: $(TEST_CONTROL_BIN)
 	@echo "--- Executando Testes da Unidade de Controle ---"
 	@./$(TEST_CONTROL_BIN)
 
+test_memoria: $(TEST_MEM_BIN)
+	@echo ""
+	@echo "--- Executando Testes de Memoria ---"
+	@./$(TEST_MEM_BIN)
+
+test_cpu_memoria: $(TEST_CPU_MEM_BIN)
+	@echo ""
+	@echo "--- Executando Testes CPU + Memoria ---"
+	@./$(TEST_CPU_MEM_BIN)
+
 # Executa todos os testes
-test: test_registers test_ula test_control_unit test_cpu
+test: test_registers test_ula test_control_unit test_cpu test_memoria test_cpu_memoria
 	@echo ""
 	@echo "=========================================="
 	@echo "  TODOS OS TESTES PASSARAM COM SUCESSO!   "
@@ -130,7 +156,7 @@ test: test_registers test_ula test_control_unit test_cpu
 # ------------------------------------------------------------------------------
 clean:
 	@echo "==> Limpando arquivos de build..."
-	rm -rf $(BUILD_DIR) $(TARGET)
+	rm -rf $(BUILD_DIR) $(TARGET) output.dat log
 	@echo "==> Limpeza concluída."
 
 # ------------------------------------------------------------------------------
@@ -145,5 +171,7 @@ help:
 	@echo "  make test_registers - Executa apenas os testes dos Registradores"
 	@echo "  make test_control_unit - Executa apenas os testes da Unidade de Controle"
 	@echo "  make test_cpu       - Executa o teste de integração da CPU"
+	@echo "  make test_memoria   - Executa os testes unitários de Memória"
+	@echo "  make test_cpu_memoria - Executa os testes de integração CPU + Memória"
 	@echo "  make clean          - Remove os binários e diretório de build"
 	@echo "  make help           - Exibe esta mensagem de ajuda"

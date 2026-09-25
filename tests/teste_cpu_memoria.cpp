@@ -1,4 +1,4 @@
-#include "../src/cpu.hpp"
+#include "../src/cpu/cpu.hpp"
 #include "../src/memory.hpp"
 #include <cassert>
 #include <iostream>
