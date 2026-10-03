@@ -12,6 +12,7 @@ para a disciplina de Sistemas Operacionais.
 O projeto implementa uma CPU modular, memória RAM, processamento em lote
 (*batch*), loader, clock, métricas e execução de programas em Assembly.
 
+### Características
 
 -   Arquitetura RISC de 16 bits
 -   8 registradores gerais (`R0`--`R7`)
@@ -63,8 +64,7 @@ O projeto implementa uma CPU modular, memória RAM, processamento em lote
 
 
 ## Execução
-
-O projeto utiliza **Make**.
+Este projeto utiliza o **Make** para gerenciar o fluxo de build e testes.
 
 ### Compilar
 
@@ -78,14 +78,13 @@ make
 make run
 ```
 
-### Executar os testes
-
+### Testes
+Para executar toda a suíte de testes:
 ``` bash
 make test
 ```
 
-Testes individuais:
-
+Para executar testes de módulos específicos:
 ``` bash
 make test_ula
 make test_registers
@@ -95,8 +94,8 @@ make test_memoria
 make test_cpu_memoria
 ```
 
-### Limpar arquivos gerados
-
+### Limpar
+Para remover arquivos compilados e temporários:
 ``` bash
 make clean
 ```
@@ -109,8 +108,7 @@ make help
 
 ## Jobs
 
-Os programas são representados por arquivos `.txt` contendo instruções
-hexadecimais de 16 bits.
+Os programas executados pelo simulador são representados por arquivos .txt compostos por instruções hexadecimais de 16 bits. Os endereços carregados em memória são relativos à base de usuário (0x0200).
 
 Exemplo:
 
