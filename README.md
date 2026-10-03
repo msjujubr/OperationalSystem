@@ -132,9 +132,6 @@ para o formato completo dos programas e a codificação das instruções.
 
 ## Colaboradores
 
-Os colaboradores são obtidos diretamente do histórico de contribuições
-do repositório:
-
  ![Contributors](https://readme-contribs.as93.net/contributors/msjujubr/OperationalSystem)
 
 
