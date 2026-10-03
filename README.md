@@ -134,10 +134,13 @@ para o formato completo dos programas e a codificação das instruções.
 
 ## Colaboradores
 
+Turma de Sistemas Operacionais 2026.2 da UFCI/MG, campus Divinópolis
+
+<!-- 
 Os colaboradores são obtidos diretamente do histórico de contribuições
 do repositório:
 
- ![Contributors](https://readme-contribs.as93.net/contributors/msjujubr/OperationalSystem)
+ ![Contributors](https://readme-contribs.as93.net/contributors/msjujubr/OperationalSystem) -->
 
 
 ------------------------------------------------------------------------
